@@ -9,7 +9,8 @@ const {likedmodel}=require("../models/liked.model.js")
 router.route('/')
  .get(async (req, res) => {
    try{
-     const likeddata=await likedmodel.findOne({likedNo:1});
+     const {userId}=req;
+     const likeddata=await likedmodel.findOne({userId});
      //console.log(liked)
      res.status(200).json({message:"success",likeddata:likeddata.liked})
      console.log(likeddata.liked)
@@ -22,12 +23,13 @@ router.route('/')
 })
 .post(async(req, res) => {
   try{
+  const {userId}=req;  
   let {likedId}=req.body;
   console.log("likedid",likedId)
-  let previtems=await likedmodel.findOne({likedNo:1}) ; 
+  let previtems=await likedmodel.findOne({userId}) ; 
   if(!previtems){
-    await likedmodel.create({likedNo:1,liked:[]});
-    let previtems=await likedmodel.findOne({likedNo:1}) ; 
+    await likedmodel.create({userId,liked:[]});
+    let previtems=await likedmodel.findOne({userId}) ; 
     previtems.liked.push(likedId)
   }
   else{
@@ -47,10 +49,12 @@ router.route('/')
   }
 })
 .delete(async(req,res)=>{
-  try{console.log(req.body)
-  let previtems=await likedmodel.findOne({likedNo:1}) ; 
-  let {likedid}=req.body;
-  let filterdata=previtems.liked.filter(eachitem=>eachitem.id!==likedid);
+  try{
+  const {userId}=req;
+  console.log(req.body)
+  let previtems=await likedmodel.findOne({userId}) ; 
+  let {likedId}=req.body;
+  let filterdata=previtems.liked.filter(eachitem=>eachitem!==likedId);
   console.log("filter",filterdata);
   
   let newdata={...previtems,liked:filterdata}

@@ -3,7 +3,7 @@ require("mongoose-type-url");
 //schema
 const likedSchema=new mongoose.Schema({
 
-likedNo:{type:Number,required:true},
+userId:{type:String,required:true},
 liked:[String]
 
 })

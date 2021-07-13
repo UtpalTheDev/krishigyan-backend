@@ -9,7 +9,8 @@ const {playlistmodel}=require("../models/playlist.model.js")
 router.route('/')
  .get(async (req, res) => {
    try{
-     const playlistdata=await playlistmodel.findOne({playlistNo:1});
+     const {userId}=req;
+     const playlistdata=await playlistmodel.findOne({userId});
      //console.log(playlist)
      res.status(200).json({message:"success",playlistdata:playlistdata.playlist})
    }
@@ -20,22 +21,25 @@ router.route('/')
 })
 .post(async(req, res) => {
   try{
+  const {userId}=req;  
   let {playlistobj}=req.body;
-  let previtems=await playlistmodel.findOne({playlistNo:1}) ; 
+  
+  let previtems=await playlistmodel.findOne({userId}) ; 
   if(!previtems){
-    await playlistmodel.create({playlistNo:1,playlist:[]});
-    let previtems=await playlistmodel.findOne({playlistNo:1}) ; 
+    await playlistmodel.create({userId,playlist:[]});
+    let previtems=await playlistmodel.findOne({userId}) ; 
     previtems.playlist.push(playlistobj)
   }
   else{
-  let check=previtems.playlist.find((item)=>item.id===playlistobj.id)
+
+  let check=(previtems.playlist.find((item)=>item.id===playlistobj.id))
   console.log(check);
   if(check===undefined){
    previtems.playlist.push(playlistobj);
   }
   }
   await previtems.save();
-  res.json({success:true,product:previtems})
+  res.json({success:true})
   }
   catch (err){
     console.log(err);
@@ -43,8 +47,10 @@ router.route('/')
   }
 })
 .delete(async(req,res)=>{
-  try{console.log(req.body)
-  let previtems=await playlistmodel.findOne({playlistNo:1}) ; 
+  try{
+  const {userId}=req;
+  console.log(req.body)
+  let previtems=await playlistmodel.findOne({userId}) ; 
   let {playlistid}=req.body;
   let filterdata=previtems.playlist.filter(eachitem=>eachitem.id!==playlistid);
   console.log("filter",filterdata);
@@ -65,8 +71,9 @@ router.route('/')
 router.route('/video/')
 .post(async(req, res) => {
   try{
+  const {userId}=req;
   let {playlistid,videoid}=req.body;
-  let previtems=await playlistmodel.findOne({playlistNo:1}) ; 
+  let previtems=await playlistmodel.findOne({userId}) ; 
   
   previtems.playlist.map(item=>{
     if(item.id===playlistid){
@@ -88,9 +95,10 @@ item.videos.push(videoid)
 })
 .delete(async(req, res) => {
   try{
+  const {userId}=req;
   let {playlistid,videoid}=req.body;
   console.log(playlistid,videoid)
-  let previtems=await playlistmodel.findOne({playlistNo:1}) ; 
+  let previtems=await playlistmodel.findOne({userId}) ; 
  
   previtems.playlist.map(item=>{
     if(item.id===playlistid){

@@ -1,16 +1,17 @@
 const mongoose=require('mongoose');
 require("mongoose-type-url");
 //schema
+
+const playlistItems= new mongoose.Schema({
+    id:{type:String,required:true},
+    name:{type:String,required:true},
+    videos:{type:[String],required:true}
+})
+
 const playlistSchema=new mongoose.Schema({
 
-playlistNo:{type:Number,required:true},
-playlist:[
-  {
-    id:String,
-    name:String,
-    videos:[String]
-  }
-]
+userId:{type:String,required:true},
+playlist:[playlistItems]
 
 })
 //model creation

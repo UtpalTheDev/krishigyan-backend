@@ -1,15 +1,17 @@
 const mongoose=require('mongoose');
 require("mongoose-type-url");
 //schema
+
+const historyItems= new mongoose.Schema({
+    historyId:{type:String,required:true},
+    lastseen:{type:Date,required:true}
+})
+
+
 const historySchema=new mongoose.Schema({
 
-historyNo:{type:Number,required:true},
-history:[
-  {
-    historyId:String,
-    lastseen:Date
-  }
-]
+userId:{type:String,required:true},
+history:[historyItems]
 
 })
 //model creation

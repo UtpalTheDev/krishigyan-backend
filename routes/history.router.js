@@ -9,7 +9,8 @@ const {historymodel}=require("../models/history.model.js")
 router.route('/')
  .get(async (req, res) => {
    try{
-     const historydata=await historymodel.findOne({historyNo:1});
+     const {userId}=req;
+     const historydata=await historymodel.findOne({userId});
      //console.log(history)
      res.status(200).json({message:"success",historydata:historydata.history})
    }
@@ -20,12 +21,13 @@ router.route('/')
 })
 .post(async(req, res) => {
   try{
+  const {userId}=req;
   let {historyId,lastseen}=req.body;
   console.log("body",req.body);
-  let previtems=await historymodel.findOne({historyNo:1}) ; 
+  let previtems=await historymodel.findOne({userId}) ; 
   if(!previtems){
-    await historymodel.create({historyNo:1,history:[]});
-    let previtems=await historymodel.findOne({historyNo:1}) ; 
+    await historymodel.create({userId,history:[]});
+    let previtems=await historymodel.findOne({userId}) ; 
     previtems.history.push({historyId,lastseen})
   }
   else{
@@ -52,8 +54,10 @@ router.route('/')
   }
 })
 .delete(async(req,res)=>{
-  try{console.log(req.body)
-  let previtems=await historymodel.findOne({historyNo:1}) ; 
+  try{
+  const {userId}=req;
+  console.log(req.body)
+  let previtems=await historymodel.findOne({userId}) ; 
   let {historyId}=req.body;
   let filterdata=previtems.history.filter(eachitem=>eachitem.historyId!==historyId);
   console.log("filter",filterdata);

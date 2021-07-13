@@ -4,11 +4,11 @@ require("mongoose-type-url");
 //schema
 const videoSchema=new mongoose.Schema({
 
-    id: String,
-    title:String,
-    dateofpublish: String,
-    duration: Number,
-    genre: String
+    id: {type:String,required:true},
+    title:{type:String,required:true},
+    dateofpublish: {type:String,required:true},
+    duration: {type:Number,required:true},
+    genre: {type:String,required:true},
 })
 //model creation
 const videomodel=mongoose.model('video',videoSchema);
