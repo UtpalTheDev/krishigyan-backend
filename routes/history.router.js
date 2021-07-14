@@ -1,10 +1,7 @@
 const express=require("express");
-const { v4: uuidv4 } = require('uuid');
 const router=express.Router();
 const { extend } = require("lodash");
 const {historymodel}=require("../models/history.model.js")
-
-
 
 router.route('/')
  .get(async (req, res) => {
@@ -31,9 +28,8 @@ router.route('/')
     previtems.history.push({historyId,lastseen})
   }
   else{
-  let check=previtems.history.find((item)=>item.historyId===historyId)
-  console.log(check);
-  if(check===undefined){
+  let isPresent=previtems.history.find((item)=>item.historyId===historyId)
+  if(isPresent===undefined){
    previtems.history.push({historyId,lastseen});
   }
   else{
@@ -50,7 +46,7 @@ router.route('/')
   }
   catch (err){
     console.log(err);
-    res.status(500).json({success:false,message:"unable to add products",errormessage:err.message})
+    res.status(500).json({success:false,message:"unable to add video",errormessage:err.message})
   }
 })
 .delete(async(req,res)=>{
@@ -60,7 +56,6 @@ router.route('/')
   let previtems=await historymodel.findOne({userId}) ; 
   let {historyId}=req.body;
   let filterdata=previtems.history.filter(eachitem=>eachitem.historyId!==historyId);
-  console.log("filter",filterdata);
   
   let newdata={...previtems,history:filterdata}
    let data=extend(previtems,newdata); 
@@ -70,7 +65,7 @@ router.route('/')
   }
   catch(err){
     console.log(err);
-        res.status(500).json({success:false,message:"unable to delete products",errormessage:err.message})
+        res.status(500).json({success:false,message:"unable to delete video",errormessage:err.message})
   }
 });
 

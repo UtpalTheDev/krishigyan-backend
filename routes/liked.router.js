@@ -13,7 +13,6 @@ router.route('/')
      const likeddata=await likedmodel.findOne({userId});
      //console.log(liked)
      res.status(200).json({message:"success",likeddata:likeddata.liked})
-     console.log(likeddata.liked)
 
    }
    catch (error){
@@ -25,7 +24,6 @@ router.route('/')
   try{
   const {userId}=req;  
   let {likedId}=req.body;
-  console.log("likedid",likedId)
   let previtems=await likedmodel.findOne({userId}) ; 
   if(!previtems){
     await likedmodel.create({userId,liked:[]});
@@ -33,19 +31,17 @@ router.route('/')
     previtems.liked.push(likedId)
   }
   else{
-  let check=previtems.liked.find((item)=>item===likedId)
-  console.log(check);
-  if(check===undefined){
+  let isPresent=previtems.liked.find((item)=>item===likedId)
+  if(isPresent===undefined){
    previtems.liked.push(likedId);
   }
-
   }
   await previtems.save();
   res.json({success:true,product:previtems})
   }
   catch (err){
     console.log(err);
-    res.status(500).json({success:false,message:"unable to add products",errormessage:err.message})
+    res.status(500).json({success:false,message:"unable to add video",errormessage:err.message})
   }
 })
 .delete(async(req,res)=>{
@@ -55,7 +51,6 @@ router.route('/')
   let previtems=await likedmodel.findOne({userId}) ; 
   let {likedId}=req.body;
   let filterdata=previtems.liked.filter(eachitem=>eachitem!==likedId);
-  console.log("filter",filterdata);
   
   let newdata={...previtems,liked:filterdata}
    let data=extend(previtems,newdata); 
@@ -65,7 +60,7 @@ router.route('/')
   }
   catch(err){
     console.log(err);
-        res.status(500).json({success:false,message:"unable to delete products",errormessage:err.message})
+        res.status(500).json({success:false,message:"unable to delete video",errormessage:err.message})
   }
 });
 

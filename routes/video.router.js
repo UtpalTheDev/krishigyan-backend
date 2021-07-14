@@ -5,8 +5,6 @@ const { extend } = require("lodash");
 const {videomodel}=require("../models/video.model.js")
 
 
-
-
 router.route('/')
  .get(async (req, res) => {
    try{
@@ -22,7 +20,6 @@ router.route('/')
   try{
   let video=req.body;
   let newvideo=await videomodel.create(video);
-  //let savedvideo=await newvideo.save();
   res.json({success:true,video:newvideo})
   }
   catch (err){

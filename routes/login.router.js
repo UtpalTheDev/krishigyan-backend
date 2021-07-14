@@ -28,8 +28,6 @@ router.route("/")
       else {
       res.status(401).json({ error: "User does not exist" });
     }
-
-      
   }
   catch(error){
     res.status(500).json({message:error});
